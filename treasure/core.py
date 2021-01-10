@@ -15,9 +15,9 @@ class Key:
                 'mem': pwhash.argon2i.MEMLIMIT_SENSITIVE}
 
     def __init__(self, password, salt=get_salt(), securityLevel=SecurityLevel.HIGH):
-        self.salt = salt
-        self.value = Key.derive(password)
         self.securityLevel = securityLevel
+        self.salt = salt
+        self.value = Key.derive(password, securityLevel=self.securityLevel)
 
     @staticmethod
     def derive(password, salt=get_salt(), securityLevel=SecurityLevel.HIGH):
@@ -40,6 +40,3 @@ class LockedTreasure:
     def unlock(self, key):
         box = secret.SecretBox(key.value)
         return UnlockedTreasure(box.decrypt(self.content).decode())
-
-    def save(self, filepath):
-        open(filepath, 'wb').write(self.content)

@@ -1,8 +1,14 @@
-from core import LockedTreasure, UnlockedTreasure, Key
+import argparse
 
-key = Key("some password")
-u = UnlockedTreasure("some message")
-print(u.content)
+from core import Key, LockedTreasure, UnlockedTreasure
 
-l = u.lock(key)
-print(l.content)
+parser = argparse.ArgumentParser()
+args = parser.parse_args()
+
+if __name__ == "__main__":
+    key = Key("some password", securityLevel=Key.SecurityLevel.LOW)
+    u = UnlockedTreasure("some message")
+    print(u.content)
+
+    l = u.lock(key)
+    print(l.content)
