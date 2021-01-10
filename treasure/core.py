@@ -1,6 +1,6 @@
 from nacl import pwhash, secret
 
-from utils import get_salt, to_bytes
+from utils import get_salt, to_bytes, get_password
 
 
 class Key:
@@ -14,7 +14,7 @@ class Key:
         HIGH = {'ops': pwhash.argon2i.OPSLIMIT_SENSITIVE,
                 'mem': pwhash.argon2i.MEMLIMIT_SENSITIVE}
 
-    def __init__(self, password, salt=get_salt(), securityLevel=SecurityLevel.HIGH):
+    def __init__(self, password=get_password(), salt=get_salt(), securityLevel=SecurityLevel.HIGH):
         self.securityLevel = securityLevel
         self.salt = salt
         self.value = Key.derive(password, securityLevel=self.securityLevel)
