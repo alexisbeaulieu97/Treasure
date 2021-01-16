@@ -66,7 +66,8 @@ def unlock():
             break
         locked = LockedTreasure.from_treasure(input_treasure.treasure)
         if not key or key.salt != locked.salt:
-            key = Key(get_password(f'treasure {input_treasure.source}'), locked.salt)
+            key = Key(get_password(
+                f'treasure {input_treasure.source}'), locked.salt)
         unlocked_treasure = locked.unlock(key)
         output_path = get_output_path(input_treasure.source)
         output_data(unlocked_treasure.content, output_path)
@@ -123,6 +124,5 @@ if __name__ == "__main__":
     check_args()
 
     # read data from stdin or input
-
     action = parse_arguments()
     action()
