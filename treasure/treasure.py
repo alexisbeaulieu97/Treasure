@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from nacl import secret
 
 from utils import data
