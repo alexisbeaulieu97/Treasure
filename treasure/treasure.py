@@ -1,18 +1,37 @@
-import argparse
+from pathlib import Path
+from nacl import secret
 
-from core import Key, LockedTreasure, UnlockedTreasure
+from utils import data
+from utils.constants import SALT_SIZE
 
-parser = argparse.ArgumentParser()
-args = parser.parse_args()
 
-if __name__ == "__main__":
-    key = Key("some password", securityLevel=Key.SecurityLevel.LOW)
-    u = UnlockedTreasure("some message")
-    print(type(u))
-    print(u.content)
+class Treasure:
+    def __init__(self, content):
+        self.content = data.to_bytes(content)
 
-    print('-'*20)
+    def save(self, filepath: Path):
+        filepath.write_bytes(self.content)
 
-    l = u.lock(key)
-    print(type(l))
-    print(l.content)
+    @classmethod
+    def from_file(cls, filepath: Path):
+        return cls(filepath.read_bytes())
+
+    @classmethod
+    def from_treasure(cls, treasure):
+        return cls(treasure.content)
+
+
+class UnlockedTreasure(Treasure):
+    def lock(self, key):
+        box = secret.SecretBox(key.value)
+        return LockedTreasure(key.salt + box.encrypt(self.content))
+
+
+class LockedTreasure(Treasure):
+    def __init__(self, content):
+        self.salt = content[:SALT_SIZE]
+        super().__init__(content)
+
+    def unlock(self, key):
+        box = secret.SecretBox(key.value)
+        return UnlockedTreasure(box.decrypt(self.content[SALT_SIZE:]))
