@@ -14,8 +14,8 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('-k', '--keep', action='store_true',
                     help='keep the original file when encrypting or decrypting from a file')
-parser.add_argument('-i', '--input', help='input file/directory path')
-parser.add_argument('-o', '--output', help='output file/directory path')
+parser.add_argument('-i', '--input', metavar='FILE', help='input file/directory path')
+parser.add_argument('-o', '--output', metavar='FILE', help='output file/directory path')
 
 # actions
 actions_group = parser.add_argument_group('action options')

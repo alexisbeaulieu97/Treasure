@@ -7,7 +7,7 @@ Treasure is a cli program that aims at providing a safe and fast method to encry
 # Usage and Arguments
 
 ```bash
-cli.py [-h] [-k] [-i INPUT] [-o OUTPUT] (-l | -u)
+cli.py [-h] [-k] [-i FILE] [-o FILE] (-l | -u)
 ```
 
 
