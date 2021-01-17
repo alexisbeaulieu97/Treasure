@@ -12,17 +12,17 @@ cli.py [-h] [-k] [-i FILE] [-o FILE] (-l | -u)
 
 
 
-| optional argument      | description                                                      |
+| optional arguments     | description                                                      |
 | ---------------------- | ---------------------------------------------------------------- |
 | -h, --help             | show this help message and exit                                  |
 | -k, --keep             | keep the original file when encrypting or decrypting from a file |
 | -i FILE, --input FILE  | input file/directory path                                        |
 | -o FILE, --output FILE | output file/directory path                                       |
 
-| action argument | description     |
-| --------------- | --------------- |
-| -l, --lock      | encrypt content |
-| -u, --unlock    | decrypt content |
+| action arguments | description     |
+| ---------------- | --------------- |
+| -l, --lock       | encrypt content |
+| -u, --unlock     | decrypt content |
 
 # Demo
 
