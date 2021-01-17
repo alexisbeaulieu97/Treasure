@@ -40,7 +40,7 @@ p2MSoYSBTInkBeAGOeGcWLQ2bFM4lR4vFE2qoDPJmd33z0skfWm0wmybtoHlwaHLZ9VD/joHHxgIV2nw
 
 ## Decryption
 
-from stdin:
+from stdin to stdout:
 
 ```bash
 echo p2MSoYSBTInkBeAGOeGcWLQ2bFM4lR4vFE2qoDPJmd33z0skfWm0wmybtoHlwaHLZ9VD/joHHxgIV2nw|python cli.py -u
