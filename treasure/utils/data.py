@@ -1,12 +1,15 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Union
 
 from treasure import Treasure
 
 
 def to_bytes(s):
-    if not isinstance(s, bytes):
-        s = str(s).encode()
+    try:
+        s = s.encode()
+    except (UnicodeEncodeError, AttributeError):
+        pass
     return s
 
 
@@ -27,4 +30,4 @@ def get_files(basepath, pattern, excludes='') -> list[Path]:
 @dataclass
 class InputTreasure:
     treasure: Treasure
-    source: Path = None
+    source: Union[str, Path] = 'stdin'

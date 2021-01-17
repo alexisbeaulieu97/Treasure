@@ -51,14 +51,14 @@ def lock():
         unlocked = UnlockedTreasure.from_treasure(input_treasure.treasure)
         locked_treasure = unlocked.lock(key)
         output_path = get_output_path(input_treasure.source)
-        output_data(locked_treasure.content, output_path)
+        output_data(locked_treasure.output(), output_path)
         delete_original(input_treasure.source)
 
 
 def unlock():
-    # read the data
     data_gen = get_data('*.ENC')
     key = None
+    input_treasure = None
     while True:
         try:
             input_treasure = next(data_gen)
@@ -67,35 +67,11 @@ def unlock():
         locked = LockedTreasure.from_treasure(input_treasure.treasure)
         if not key or key.salt != locked.salt:
             key = Key(get_password(
-                f'treasure {input_treasure.source}'), locked.salt)
+                f'{input_treasure.source} treasure'), locked.salt)
         unlocked_treasure = locked.unlock(key)
         output_path = get_output_path(input_treasure.source)
-        output_data(unlocked_treasure.content, output_path)
+        output_data(unlocked_treasure.output(), output_path)
         delete_original(input_treasure.source)
-
-
-def get_output_path(source):
-    output_path = args.output
-    if output_path and os.path.isdir(output_path):
-        output_path = os.path.join(output_path, os.path.basename(source))
-    return output_path
-
-
-def output_data(data, filepath=None):
-    if filepath:
-        if args.lock:
-            filepath = filepath + '.ENC'
-        else:
-            filepath = filepath.split('.ENC')[0]
-        file = Path(filepath)
-        file.write_bytes(data)
-    else:
-        print(data)
-
-
-def delete_original(filepath: Path):
-    if args.input and not args.keep:
-        filepath.unlink()
 
 
 def get_data(pattern='*', excludes=''):
@@ -108,6 +84,32 @@ def get_data(pattern='*', excludes=''):
         yield InputTreasure(Treasure(stdin_data))
 
 
+def output_data(data: bytes, filepath=None):
+    if filepath:
+        if args.lock:
+            # add .ENC
+            filepath = filepath + '.ENC'
+        else:
+            # remove .ENC
+            filepath = filepath.split('.ENC')[0]
+        file = Path(filepath)
+        file.write_bytes(data)
+    else:
+        sys.stdout.buffer.write(data)
+
+
+def delete_original(filepath: Path):
+    if args.input and not args.keep:
+        filepath.unlink()
+
+
+def get_output_path(source):
+    output_path = args.output
+    if output_path and os.path.isdir(output_path):
+        output_path = os.path.join(output_path, os.path.basename(source))
+    return output_path
+
+
 def check_args():
     # check if args.input or stdin is not empty
     if not args.input and sys.stdin.isatty():
@@ -115,7 +117,7 @@ def check_args():
 
     # check if input was provided but could not be found
     if args.input and not os.path.exists(args.input):
-        print(f'could not find {args.input}')
+        raise Exception(f'could not find {args.input}')
 
 
 # Main

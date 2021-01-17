@@ -1,4 +1,5 @@
 from pathlib import Path
+import base64
 
 from nacl import secret
 
@@ -10,8 +11,8 @@ class Treasure:
     def __init__(self, content):
         self.content = data.to_bytes(content)
 
-    def save(self, filepath: Path):
-        filepath.write_bytes(self.content)
+    def output(self):
+        return self.content
 
     @classmethod
     def from_file(cls, filepath: Path):
@@ -25,13 +26,18 @@ class Treasure:
 class UnlockedTreasure(Treasure):
     def lock(self, key):
         box = secret.SecretBox(key.value)
-        return LockedTreasure(key.salt + box.encrypt(self.content))
+        return LockedTreasure(base64.b64encode(key.salt + box.encrypt(self.content)))
 
 
 class LockedTreasure(Treasure):
     def __init__(self, content):
-        self.salt = content[:SALT_SIZE]
-        super().__init__(content)
+        decoded = base64.b64decode(content)
+        self.content = data.to_bytes(decoded)
+        self.salt = decoded[:SALT_SIZE]
+        super().__init__(self.content)
+
+    def output(self):
+        return base64.b64encode(self.content)
 
     def unlock(self, key):
         box = secret.SecretBox(key.value)
