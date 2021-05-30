@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('-k', '--keep', action='store_true',
                     help='keep the original file when encrypting or decrypting from a file')
+parser.add_argument('-n', '--new', action='store_true', help='use a different key on every file')
 parser.add_argument('-i', '--input', metavar='FILE', help='input file/directory path')
 parser.add_argument('-o', '--output', metavar='FILE', help='output file/directory path')
 
@@ -53,6 +54,8 @@ def lock():
         output_path = get_output_path(input_treasure.source)
         output_data(locked_treasure.output(), output_path)
         delete_original(input_treasure.source)
+        if args.new:
+            key = Key(get_password('treasure(s)'))
 
 
 def unlock():
