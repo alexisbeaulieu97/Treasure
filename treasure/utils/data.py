@@ -1,8 +1,7 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Union
-
-from treasure import Treasure
 
 
 def to_bytes(s):
@@ -29,5 +28,5 @@ def get_files(basepath, pattern, excludes='') -> list[Path]:
 
 @dataclass
 class InputTreasure:
-    treasure: Treasure
+    treasure: 'Treasure'
     source: Union[str, Path] = 'stdin'
