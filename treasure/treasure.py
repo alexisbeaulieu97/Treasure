@@ -3,8 +3,8 @@ import base64
 
 from nacl import secret
 
-from utils import data
-from utils.constants import SALT_SIZE
+from treasure.utils import data
+from treasure.utils.constants import SALT_SIZE
 
 
 class Treasure:
