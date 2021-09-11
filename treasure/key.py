@@ -1,8 +1,8 @@
 from nacl import pwhash
 
-from utils import data, rand
-from utils.constants import KEY_SIZE
-from utils.file import get_salt
+from treasure.utils import data, rand
+from treasure.utils.constants import KEY_SIZE
+from treasure.utils.file import get_salt
 
 
 class Key:

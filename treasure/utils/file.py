@@ -1,6 +1,6 @@
 import json
 
-from utils.constants import SALT_SIZE
+from treasure.utils.constants import SALT_SIZE
 
 
 def read_json(filepath):

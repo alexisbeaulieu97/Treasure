@@ -26,15 +26,13 @@ class Treasure:
 class UnlockedTreasure(Treasure):
     def lock(self, key):
         box = secret.SecretBox(key.value)
-        return LockedTreasure(base64.b64encode(key.salt + box.encrypt(self.content)))
+        return LockedTreasure(key.salt + box.encrypt(self.content))
 
 
 class LockedTreasure(Treasure):
     def __init__(self, content):
-        decoded = base64.b64decode(content)
-        self.content = data.to_bytes(decoded)
-        self.salt = decoded[:SALT_SIZE]
-        super().__init__(self.content)
+        self.salt = content[:SALT_SIZE]
+        super().__init__(content)
 
     def output(self):
         return base64.b64encode(self.content)
