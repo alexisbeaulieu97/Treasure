@@ -24,7 +24,3 @@ class Key:
     def derive(password, salt=None, securityLevel=SecurityLevel.HIGH):
         salt = rand.gen_salt() if salt is None else salt
         return pwhash.argon2i.kdf(KEY_SIZE, data.to_bytes(password), salt, securityLevel['ops'], securityLevel['mem'])
-
-    @classmethod
-    def from_file(cls, salt_filepath, password=None, securityLevel=SecurityLevel.HIGH):
-        return cls(password, get_salt(salt_filepath), securityLevel)
