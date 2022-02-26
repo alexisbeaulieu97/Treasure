@@ -1,6 +1,6 @@
 import nacl.utils
 
-from utils.constants import PASSWORD_SIZE, SALT_SIZE
+from .constants import PASSWORD_SIZE, SALT_SIZE
 
 
 def gen_salt(size=SALT_SIZE):

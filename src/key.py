@@ -1,18 +1,24 @@
 from nacl import pwhash
 
-from utils import data, rand
-from utils.constants import KEY_SIZE
-from utils.file import get_salt
+from .utils import data, rand
+from .utils.constants import KEY_SIZE
+from .utils.file import get_salt
 
 
 class Key:
     class SecurityLevel:
-        LOW = {'ops': pwhash.argon2i.OPSLIMIT_INTERACTIVE,
-               'mem': pwhash.argon2i.MEMLIMIT_INTERACTIVE}
-        MEDIUM = {'ops': pwhash.argon2i.OPSLIMIT_MODERATE,
-                  'mem': pwhash.argon2i.MEMLIMIT_MODERATE}
-        HIGH = {'ops': pwhash.argon2i.OPSLIMIT_SENSITIVE,
-                'mem': pwhash.argon2i.MEMLIMIT_SENSITIVE}
+        LOW = {
+            "ops": pwhash.argon2i.OPSLIMIT_INTERACTIVE,
+            "mem": pwhash.argon2i.MEMLIMIT_INTERACTIVE,
+        }
+        MEDIUM = {
+            "ops": pwhash.argon2i.OPSLIMIT_MODERATE,
+            "mem": pwhash.argon2i.MEMLIMIT_MODERATE,
+        }
+        HIGH = {
+            "ops": pwhash.argon2i.OPSLIMIT_SENSITIVE,
+            "mem": pwhash.argon2i.MEMLIMIT_SENSITIVE,
+        }
 
     def __init__(self, password=None, salt=None, securityLevel=SecurityLevel.HIGH):
         password = rand.gen_password() if password is None else password
@@ -23,7 +29,13 @@ class Key:
     @staticmethod
     def derive(password, salt=None, securityLevel=SecurityLevel.HIGH):
         salt = rand.gen_salt() if salt is None else salt
-        return pwhash.argon2i.kdf(KEY_SIZE, data.to_bytes(password), salt, securityLevel['ops'], securityLevel['mem'])
+        return pwhash.argon2i.kdf(
+            KEY_SIZE,
+            data.to_bytes(password),
+            salt,
+            securityLevel["ops"],
+            securityLevel["mem"],
+        )
 
     @classmethod
     def from_file(cls, salt_filepath, password=None, securityLevel=SecurityLevel.HIGH):

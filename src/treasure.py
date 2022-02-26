@@ -1,10 +1,12 @@
-from pathlib import Path
 import base64
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Union
 
 from nacl import secret
 
-from treasure.utils import data
-from treasure.utils.constants import SALT_SIZE
+from .utils import data
+from .utils.constants import SALT_SIZE
 
 
 class Treasure:
@@ -42,3 +44,9 @@ class LockedTreasure(Treasure):
     def unlock(self, key):
         box = secret.SecretBox(key.value)
         return UnlockedTreasure(box.decrypt(self.content[SALT_SIZE:]))
+
+
+@dataclass
+class InputTreasure:
+    treasure: Treasure
+    source: Union[str, Path] = "stdin"
